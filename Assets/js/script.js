@@ -6,7 +6,8 @@ var currentWeatherHeader = $('.current-weather').children('h2');
 // Array for localStorage
 var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
 console.log(totalSearches);
-
+// Array to store API array for populating the current weather creation
+var cityWeatherData = ['temp', 'wind', 'humidity', 'uvi']
 
 // DEFINING FUNCTIONS
 // Storing input from input field
@@ -31,27 +32,27 @@ var searchCity = function () {
   };
 };
 
-// Populate Current Weather Field
+// Create Current Weather Field
 var displayWeather = function () {
+  // Element Creation Variables
   var newDiv = document.createElement('div');
   var newHeader = document.createElement('h2')
-  // May have to loop
-  var newP = document.createElement('p');
-
-  // currentWeatherHeader.textContent = 'Arden';
-  // console.log(currentWeatherHeader.textContent);
 
   // Current Weather Div
   newDiv.classList.add('current-weather');
 
-  // Header Styling
+  // City Name & Date Header
   newHeader.textContent = 'Arden';
 
-  // Paragraph Styling
-  newP.textContent = 'Arden 2';
-
   // Appending dynamically created children to elements
-  newDiv.append(newHeader, newP);
+  newDiv.append(newHeader);
+
+  // Loop to generate element p, add content from array in Global scope, append it to current weather
+  for (var i = 0; i < 4; i++) {
+    var newP = document.createElement('p');
+    newP.textContent = cityWeatherData[i];
+    newDiv.append(newP);
+  };
   weatherBlock.append(newDiv);
 };
 displayWeather();
