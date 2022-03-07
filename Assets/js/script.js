@@ -30,6 +30,7 @@ var searchCity = function () {
   };
 };
 
+// Creates buttons for stored cities on page load
 var buttonCreation = function () {
   var container = document.querySelector('.button-container');
   for (var i = 0; i < totalSearches.length; i++) {
@@ -39,7 +40,22 @@ var buttonCreation = function () {
     container.appendChild(buttonField);
   };
 };
+// Calls button loading
 buttonCreation();
+
+// Fetching information from Weather API
+function getApi() {
+  // fetch request gets a list of all the repos for the node.js organization
+  var requestUrl = 'https://api.github.com/orgs/nodejs/repos';
+
+  fetch(requestUrl)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+    });
+};
 
 // BUTTON FUNCTIONALITY
 // Search button
