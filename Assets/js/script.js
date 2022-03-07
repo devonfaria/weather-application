@@ -74,10 +74,11 @@ var displayWeather = function () {
     newForecastDiv.append(newForecastHeader);
 
     for (var j = 0; j < 3; j++) {
-    newP.textContent = forecastWeatherData[i];
-    newForecastDiv.append(newP);
-    };
+    var newDetail = document.createElement('p');
+    newDetail.textContent = forecastWeatherData[j];
+    newForecastDiv.append(newDetail);
     weatherBlock.append(newForecastDiv);
+    };
   };
 };
 displayWeather();
