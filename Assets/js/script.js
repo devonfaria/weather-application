@@ -1,24 +1,26 @@
 // Defining Interactables
-var cityInput = document.querySelector('.input-field');
+var cityFormEl = document.getElementById('city-form');
+var cityInputEl = document.querySelector('.input-field');
 var searchBtn = document.querySelector('.search-btn');
 var weatherBlock = document.querySelector('.weather-bar');
 var currentWeatherHeader = $('.current-weather').children('h2');
 // Array for localStorage
 var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
-console.log(totalSearches);
+
 // Array to store API array for populating the current weather creation
 var cityWeatherData = ['temp', 'wind', 'humidity', 'uvi']
 var forecastWeatherData = ['temp', 'wind', 'humidity',]
-
+var currentDay = [];
 
 
 
 // DEFINING FUNCTIONS
 // Storing input from input field
-var searchCity = function () {
+var searchCity = function (event) {
+  event.preventDefault();
   var container = document.querySelector('.button-container');
   // Captures the input text of the adjoining input field
-  var city = $(this).siblings('.input-field').val();
+  var city = cityInputEl.value.trim();
   if (totalSearches.includes(`${city}`)) {
     // remove item from array
     console.log('Already has city');
@@ -98,12 +100,12 @@ var buttonCreation = function () {
 buttonCreation();
 
 
-
+// API CALLS
 
 // Template literal for API Key Generation
 // var api = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&appid=${apiKey}`;
-var api = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452';
-
+var apiCurrent = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452';
+var apiFiveDay = 'https://api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=7725fe6ddb0f977753dda606bc09c452'
 // Chicago test API
 // 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452'
 
@@ -112,24 +114,24 @@ var api = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&
 
 // Fetching current information from Weather API
 var getAPI = function () {
-  var requestUrl = api;
+  var requestUrl = apiCurrent;
   fetch(requestUrl)
     .then(function (response) {
+      console.log(response.ok);
       return response.json();
     })
     .then(function (data) {
-      // This is how I will reference the data needed
-      console.log(data.current.temp);
-      console.log(data.current.wind_gust);
-      console.log(data.current.humidity);
-      console.log(data.current.uvi);
+      currentDay = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
+      return currentDay;
     });
+    console.log(currentDay);
 };
 getAPI();
 
+console.log(currentDay);
 // BUTTON FUNCTIONALITY
 // Search button
-searchBtn.addEventListener('click', searchCity);
+cityFormEl.addEventListener('submit', searchCity);
 
 // for (var i = 0; i < totalSearches.length; i++) {
 //   var buttonField = document.createElement('button');
