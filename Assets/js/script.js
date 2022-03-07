@@ -1,8 +1,10 @@
 // Defining Interactables
 var cityInput = document.querySelector('.input-field');
 var searchBtn = document.querySelector('.search-btn');
+var weatherBlock = document.querySelector('.weather-bar');
+var currentWeatherHeader = $('.current-weather').children('h2');
+// Array for localStorage
 var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
-// JSON.parse(localStorage.getItem('searches')) ||
 console.log(totalSearches);
 
 
@@ -26,9 +28,34 @@ var searchCity = function () {
   buttonNew.classList.add('searched-city-button');
   buttonNew.textContent = city;
   container.appendChild(buttonNew);
-  // buttonCreation();
   };
 };
+
+// Populate Current Weather Field
+var displayWeather = function () {
+  var newDiv = document.createElement('div');
+  var newHeader = document.createElement('h2')
+  // May have to loop
+  var newP = document.createElement('p');
+
+  // currentWeatherHeader.textContent = 'Arden';
+  // console.log(currentWeatherHeader.textContent);
+
+  // Current Weather Div
+  newDiv.classList.add('current-weather');
+
+  // Header Styling
+  newHeader.textContent = 'Arden';
+
+  // Paragraph Styling
+  newP.textContent = 'Arden 2';
+
+  // Appending dynamically created children to elements
+  newDiv.append(newHeader, newP);
+  weatherBlock.append(newDiv);
+};
+displayWeather();
+
 
 // Creates buttons for stored cities on page load
 var buttonCreation = function () {
@@ -44,11 +71,15 @@ var buttonCreation = function () {
 buttonCreation();
 
 // Template literal for API Key Generation
-var api = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&appid=${apiKey}`;
+// var api = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&appid=${apiKey}`;
+var api = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452';
+
+// Chicago test API
+// 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452'
 
 // Fetching information from Weather API
 var getAPI = function () {
-  var requestUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452';
+  var requestUrl = api;
   fetch(requestUrl)
     .then(function (response) {
       return response.json();
@@ -56,6 +87,7 @@ var getAPI = function () {
     .then(function (data) {
       // This is how I will reference the data needed
       console.log(data.current.temp);
+
       console.log(data.current.wind_gust);
       console.log(data.current.humidity);
       console.log(data.current.uvi);
