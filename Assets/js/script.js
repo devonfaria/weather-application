@@ -43,16 +43,18 @@ var buttonCreation = function () {
 // Calls button loading
 buttonCreation();
 
+// Template literal for API Key Generation
+var api = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&appid=${apiKey}`;
+
 // Fetching information from Weather API
 var getAPI = function () {
-  // fetch request gets a list of all the repos for the node.js organization
   var requestUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452';
-
   fetch(requestUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
+      // This is how I will reference the data needed
       console.log(data.current.temp);
       console.log(data.current.wind_gust);
       console.log(data.current.humidity);
