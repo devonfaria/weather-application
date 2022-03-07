@@ -63,3 +63,10 @@ THEN I am presented with a 5-day forecast that displays the date, an icon repres
 WHEN I click on a city in the search history
 
 THEN I am again presented with current and future conditions for that city
+
+NOTES: 
+I need:
+- API to pull city lat and long and feed it global variable for getAPI function to pull and generate a template literal API Request
+- Make generated buttons trigger the searchCity function
+- return city api details to global variable from getAPI function for displayWeather function to pull
+- discover the source of the daily forecast information for forecast generating
