@@ -1,9 +1,9 @@
 // Defining Interactables
 var cityInput = document.querySelector('.input-field');
 var searchBtn = document.querySelector('.search-btn');
-var totalSearches = [];
+var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
 // JSON.parse(localStorage.getItem('searches')) ||
-
+console.log(totalSearches);
 
 
 // DEFINING FUNCTIONS
@@ -39,6 +39,7 @@ var buttonCreation = function () {
     container.appendChild(buttonField);
   };
 };
+buttonCreation();
 
 // BUTTON FUNCTIONALITY
 // Search button
