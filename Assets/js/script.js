@@ -8,6 +8,10 @@ var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
 console.log(totalSearches);
 // Array to store API array for populating the current weather creation
 var cityWeatherData = ['temp', 'wind', 'humidity', 'uvi']
+var forecastWeatherData = ['temp', 'wind', 'humidity',]
+
+
+
 
 // DEFINING FUNCTIONS
 // Storing input from input field
@@ -35,25 +39,46 @@ var searchCity = function () {
 // Create Current Weather Field
 var displayWeather = function () {
   // Element Creation Variables
-  var newDiv = document.createElement('div');
-  var newHeader = document.createElement('h2')
+  var currentDiv = document.createElement('div');
+  var currentHeader = document.createElement('h2');
+  var generalForecastHeader = document.createElement('h3');
 
+  // ADDING CONTENT TO CURRENT WEATHER
   // Current Weather Div
-  newDiv.classList.add('current-weather');
+  currentDiv.classList.add('current-weather');
 
   // City Name & Date Header
-  newHeader.textContent = 'Arden';
-
+  currentHeader.textContent = 'Arden';
+  
   // Appending dynamically created children to elements
-  newDiv.append(newHeader);
+  currentDiv.append(currentHeader);
 
-  // Loop to generate element p, add content from array in Global scope, append it to current weather
+// LOOP CREATING CURRENT WEATHER CONDITIONS
   for (var i = 0; i < 4; i++) {
     var newP = document.createElement('p');
     newP.textContent = cityWeatherData[i];
-    newDiv.append(newP);
+    currentDiv.append(newP);
   };
-  weatherBlock.append(newDiv);
+  // 5-DAY FORECAST HEADER
+  generalForecastHeader.textContent = '5-Day Forecast';
+
+  weatherBlock.append(currentDiv);
+  weatherBlock.append(generalForecastHeader);
+  // FORECAST CONDITIONS
+  for (var i = 0; i < 5; i++) {
+    var newForecastDiv = document.createElement('div');
+    var newForecastHeader = document.createElement('h4');
+
+    newForecastDiv.classList.add('forecast-day');
+    newForecastHeader.textContent = 'Forecast';
+    newForecastDiv.append(newForecastHeader);
+
+    for (var j = 0; j < 3; j++) {
+    newP.textContent = forecastWeatherData[i];
+    newForecastDiv.append(newP);
+    };
+    weatherBlock.append(newForecastDiv);
+  };
 };
 displayWeather();
 
@@ -71,6 +96,9 @@ var buttonCreation = function () {
 // Calls button loading
 buttonCreation();
 
+
+
+
 // Template literal for API Key Generation
 // var api = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&appid=${apiKey}`;
 var api = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452';
@@ -78,7 +106,10 @@ var api = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&
 // Chicago test API
 // 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452'
 
-// Fetching information from Weather API
+
+
+
+// Fetching current information from Weather API
 var getAPI = function () {
   var requestUrl = api;
   fetch(requestUrl)
@@ -88,7 +119,6 @@ var getAPI = function () {
     .then(function (data) {
       // This is how I will reference the data needed
       console.log(data.current.temp);
-
       console.log(data.current.wind_gust);
       console.log(data.current.humidity);
       console.log(data.current.uvi);
