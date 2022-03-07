@@ -9,16 +9,24 @@ var totalSearches = [];
 // DEFINING FUNCTIONS
 // Storing input from input field
 var searchCity = function () {
+  var container = document.querySelector('.button-container');
+  // Captures the input text of the adjoining input field
   var city = $(this).siblings('.input-field').val();
   if (totalSearches.includes(`${city}`)) {
     // remove item from array
     console.log('Already has city');
   } else {
+    // Adds the city to the beginning of the array
   totalSearches.unshift(city);
-  console.log(totalSearches);
+  // Stores totalSearches in localStorage
   var storage = JSON.stringify(totalSearches);
-  localStorage.setItem('searches', totalSearches);
-  buttonCreation();
+  localStorage.setItem('searches', storage);
+  // Adds button for newly search city
+  var buttonNew = document.createElement('button');
+  buttonNew.classList.add('searched-city-button');
+  buttonNew.textContent = city;
+  container.appendChild(buttonNew);
+  // buttonCreation();
   };
 };
 
