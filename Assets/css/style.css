@@ -41,6 +41,14 @@ main {
   border-top: 3px solid black;
 }
 
+.searched-city-button {
+  padding: 5px;
+  margin: 10px 5% 0 5%;
+  width: 90%;
+  background-color: grey;
+  color: white;
+}
+
 .search-btn {
   width: 90%;
   padding: 5px;
