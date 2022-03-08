@@ -6,7 +6,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(29, 158, 209);
+  background-image: linear-gradient(to bottom right, rgb(36, 65, 190), rgb(77, 13, 122));
 }
 
 h1 {
@@ -28,7 +28,7 @@ img {
 }
 
 .search-header {
-  margin: 15px 15px 15px 35px;
+  margin: 15px 15px 15px 25px;
   font-weight: 700;
 }
 
@@ -59,7 +59,7 @@ img {
   width: 90%;
   padding: 5px;
   margin: 5%;
-  background-color: rgb(29, 158, 209);
+  background-color: rgb(29, 122, 209);
   color: white;
   border-radius: 5px;
 }
@@ -69,7 +69,7 @@ img {
 }
 
 .current-weather {
-  padding: 10px;
+  padding: 10px 20px;
   border: 2px solid black;
   width: 100%;
 }
