@@ -48,7 +48,7 @@ var getCoordinates = function (city) {
     if (response.ok) {
       response.json().then(function (data) {
         createCurrentWeather(city, data[0].lat, data[0].lon);
-        createForecast(city, data[0].lat, data[0].lon);
+        createForecast(data[0].lat, data[0].lon);
       });
     } else {
       alert('Error: ' + response.statusText);
@@ -64,7 +64,6 @@ var createCurrentWeather = function (city, lat, lon) {
   var apiCurrent = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
   fetch(apiCurrent)
     .then(function (response) {
-      console.log(response.ok);
       return response.json();
     })
     .then(function (data) {
@@ -99,18 +98,16 @@ var createCurrentWeather = function (city, lat, lon) {
 };
 
 // CREATES DAILY FORECAST
-var createForecast = function (city, lat, lon) {
+var createForecast = function (lat, lon) {
   var apiForecast = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
   fetch(apiForecast)
     .then(function (response) {
-      console.log(response.ok);
       return response.json();
     })
     .then(function (data) {
       for (var i = 1; i < 6; i++) {
         var forecastEl = document.createElement('div');
         forecastEl.classList.add('forecast-day');
-        console.log(data);
         var forecastHeaderEl = document.createElement('h2');
         var imgEl = document.createElement('img');
         forecastHeaderEl.classList.add('forecast-header');
@@ -124,14 +121,14 @@ var createForecast = function (city, lat, lon) {
         // Appending current weather header and weather icon
         forecastEl.append(forecastHeaderEl, imgEl);
 
-        // array of current weather condition to pass into <p> generation loop
+        // array of forecast condition to pass into <p> generation loop
         var apiPull = [`Temp: ${data.daily[i].temp.day} Kelvin`, `Wind: ${data.daily[i].wind_speed} MPH`, `Humidity: ${data.daily[i].humidity}%`];
         console.log(apiPull);
 
         // Loop creating  and appending current weather conditions
         for (var j = 0; j < 3; j++) {
           var newP = document.createElement('p');
-          newP.textContent = apiPull[i];
+          newP.textContent = apiPull[j];
           forecastEl.append(newP);
         };
       
