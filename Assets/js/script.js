@@ -160,25 +160,16 @@ var buttonCreation = function () {
     container.appendChild(buttonField);
   };
 };
-// Calls button loading
+// Calls button loading from localStorage
 buttonCreation();
 
-
 var apiFiveDay = 'https://api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=7725fe6ddb0f977753dda606bc09c452'
-// Chicago test API
-// 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452'
-
-
 
 // BUTTON FUNCTIONALITY - NEED TO ADD CITY BUTTON FUNCTIONALITY
 // Search button
 cityFormEl.addEventListener('submit', searchCity);
-// cityButtonEl.addEventListener('click', function () {
-//  document.querySelector('.searched-city-button') = city;
-// });
-
-// for (var i = 0; i < totalSearches.length; i++) {
-//   var buttonField = document.createElement('button');
-//   buttonField.classList.add('searched-city-button');
-//   buttonField.textContent = totalSearches[i];
-// };
+// Generated City Buttons
+$(document).on('click', '.searched-city-button', function (event) {
+  var cityName = $(this).attr('id');
+  getCoordinates(cityName);
+});
