@@ -73,6 +73,27 @@ main {
   display: inline;
 }
 
+.safe {
+  width: auto;
+  background-color: green;
+  color: white;
+  padding: 10px;
+}
+
+.moderate {
+  width: auto;
+  background-color: gold;
+  color: white;
+  padding: 10px;
+}
+
+.severe {
+  width: auto;
+  background-color: red;
+  color: white;
+  padding: 10px;
+}
+
 h3 {
   display: block;
   width: 100%;

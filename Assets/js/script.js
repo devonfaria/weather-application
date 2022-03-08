@@ -93,14 +93,23 @@ var createCurrentWeather = function (city, lat, lon) {
       currentDiv.append(currentHeaderEl, imgEl);
 
       // array of current weather condition to pass into <p> generation loop
-      var apiPull = [`Temperature: ${data.current.temp} Kelvin`, `Wind Speed: ${data.current.wind_speed} MPH`, `Humidity: ${data.current.humidity}%`, `UVI Index: ${data.current.uvi}`];
+      var apiPull = [`Temperature: ${data.current.temp} Kelvin`, `Wind Speed: ${data.current.wind_speed} MPH`, `Humidity: ${data.current.humidity}%`];
 
       // Loop creating  and appending current weather conditions
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 3; i++) {
       var newP = document.createElement('p');
       newP.textContent = apiPull[i];
       currentDiv.append(newP);
       };
+      var newUVI = document.createElement('p');
+      if (data.current.uvi < 3) {
+        newUVI.innerHTML = 'UVI Index: ' + `<span class='safe'>${data.current.uvi}%</span>`;
+      } else if(data.current.uvi > 5){
+        newUVI.innerHTML = 'UVI Index: ' + `<span class='severe'>${data.current.uvi}%</span>`;
+      } else {
+        newUVI.innerHTML = 'UVI Index: ' + `<span class='moderate'>${data.current.uvi}%</span>`;
+      };
+      currentDiv.append(newUVI);
     });
   // Adding current weather div to weather bar
   weatherBlock.append(currentDiv);
