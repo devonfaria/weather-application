@@ -18,7 +18,8 @@ var getCoordinates = function (city) {
   fetch(apiCoordinates).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        fetchCityWeather(data[0].lat, data[0].lon);
+        console.log(city);
+        fetchCurrentWeather(city, data[0].lat, data[0].lon);
       });
     } else {
       alert('Error: ' + response.statusText);
@@ -54,13 +55,44 @@ var searchCity = function (event) {
   };
 };
 
+// Fetching current information from Weather API
+var fetchCurrentWeather = function (city, lat, lon) {
+  var currentDay = [];
+  var apiCurrent = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
+  fetch(apiCurrent)
+    .then(function (response) {
+      console.log(response.ok);
+      return response.json();
+    })
+    .then(function (data) {
+      var apiPull = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
+      return currentDay;
+    });
+};
+
+// Fetching forecast information from Weather API
+var fetchForecastWeather = function (lat, lon) {
+  var forcastDay = [];
+  var apiForecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=7725fe6ddb0f977753dda606bc09c452`;
+  fetch(apiForecast)
+    .then(function (response) {
+      console.log(response.ok);
+      return response.json();
+    })
+    .then(function (data) {
+      forcastDay = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
+      console.log(forcastDay);
+      return forcastDay;
+    });
+};
+
 // CREATES CURRENT WEATHER DIV
-var createCurrent = function () {
+var createCurrent = function (data) {
   var currentDiv = document.createElement('div');
   var currentHeader = document.createElement('h2');
   currentDiv.classList.add('current-weather');
   // City Name & Date Header
-  currentHeader.textContent = 'Arden';
+  currentHeader.textContent = `Arden`;
   // Append to 
   currentDiv.append(currentHeader);
   // Loop creating current weather conditions
@@ -124,33 +156,9 @@ var buttonCreation = function () {
 buttonCreation();
 
 
-// API CALLS
-
-// Template literal for API Key Generation
-// var api = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&appid=${apiKey}`;
-// var apiCurrent = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452';
 var apiFiveDay = 'https://api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=7725fe6ddb0f977753dda606bc09c452'
 // Chicago test API
 // 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452'
-
-
-
-
-// Fetching current information from Weather API
-var fetchCityWeather = function (lat, lon) {
-  var currentDay = [];
-  var apiCurrent = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
-  fetch(apiCurrent)
-    .then(function (response) {
-      console.log(response.ok);
-      return response.json();
-    })
-    .then(function (data) {
-      currentDay = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
-      console.log(currentDay);
-      return currentDay;
-    });
-};
 
 
 
