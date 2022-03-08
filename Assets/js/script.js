@@ -14,11 +14,40 @@ var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
 // FUNCTION: SENDS CITY NAME TO GET COORDINATES FUNCTION, AND CREATES BUTTONS FOR UNIQUE CITY ENTRIES
 var searchCity = function (event) {
   event.preventDefault();
+  // removes HTML from weather bar
   document.querySelector('.weather-bar').innerHTML = '';
   var city = cityInputEl.value.trim();
-  var container = document.querySelector('.button-container');
   // Translates city name to coordinates
   getCoordinates(city);
+};
+
+// FUNCTION: TRANSLATES CITY NAME TO COORDINATES
+var getCoordinates = function (city) {
+  var cityName = city;
+  var apiCoordinates = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=7725fe6ddb0f977753dda606bc09c452`;
+  fetch(apiCoordinates)
+    .then(function (response) {
+      if (response.ok) {
+      response.json()
+      .then(function (data) {
+        if (!data.length) {
+          console.log('Not a city!');
+          return;
+        } else {
+          addButton(cityName);
+          createCurrentWeather(city, data[0].lat, data[0].lon);
+          createForecast(data[0].lat, data[0].lon);
+        };
+      });
+      } else {
+        alert('Error: ' + response.statusText);
+      }
+  });
+};
+
+var addButton = function (city) {
+  var container = document.querySelector('.button-container');
+
   // CONDITIONAL: add city to localStorage if not already there, and creates a button for unique entries
   if (totalSearches.includes(`${city}`)) {
     // remove item from array
@@ -36,21 +65,6 @@ var searchCity = function (event) {
     buttonNew.textContent = city;
     container.appendChild(buttonNew);
   };
-};
-
-// FUNCTION: TRANSLATES CITY NAME TO COORDINATES
-var getCoordinates = function (city) {
-  var apiCoordinates = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=7725fe6ddb0f977753dda606bc09c452`;
-  fetch(apiCoordinates).then(function (response) {
-    if (response.ok) {
-      response.json().then(function (data) {
-        createCurrentWeather(city, data[0].lat, data[0].lon);
-        createForecast(data[0].lat, data[0].lon);
-      });
-    } else {
-      alert('Error: ' + response.statusText);
-    }
-  });
 };
 
 // FUNCTION: CREATING CURRENT WEATHER BOX
