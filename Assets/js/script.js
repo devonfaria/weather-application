@@ -1,6 +1,7 @@
 // Defining Interactables
 var cityFormEl = document.getElementById('city-form');
 var cityInputEl = document.querySelector('.input-field');
+var cityButtonEl;
 var searchBtn = document.querySelector('.search-btn');
 var weatherBlock = document.querySelector('.weather-bar');
 var currentWeatherHeader = $('.current-weather').children('h2');
@@ -18,9 +19,12 @@ var currentDay = [];
 // Storing input from input field
 var searchCity = function (event) {
   event.preventDefault();
-  var container = document.querySelector('.button-container');
-  // Captures the input text of the adjoining input field
   var city = cityInputEl.value.trim();
+  var container = document.querySelector('.button-container');
+
+// ADD API GEOGRAPHICAL FUNCTION HERE
+
+// CONDITIONAL: ADDS CITY TO LOCALSTORAGE ARRAY IF NOT ALREADY THERE, AND THEN ADDS A BUTTON IN ADDITION
   if (totalSearches.includes(`${city}`)) {
     // remove item from array
     console.log('Already has city');
@@ -33,44 +37,17 @@ var searchCity = function (event) {
   // Adds button for newly search city
   var buttonNew = document.createElement('button');
   buttonNew.classList.add('searched-city-button');
+  buttonNew.setAttribute('id', `${city}`);
   buttonNew.textContent = city;
   container.appendChild(buttonNew);
   };
 };
 
-// Create Current Weather Field
-var displayWeather = function () {
-  // Element Creation Variables
-  var currentDiv = document.createElement('div');
-  var currentHeader = document.createElement('h2');
-  var generalForecastHeader = document.createElement('h3');
-
-  // ADDING CONTENT TO CURRENT WEATHER
-  // Current Weather Div
-  currentDiv.classList.add('current-weather');
-
-  // City Name & Date Header
-  currentHeader.textContent = 'Arden';
-  
-  // Appending dynamically created children to elements
-  currentDiv.append(currentHeader);
-
-// LOOP CREATING CURRENT WEATHER CONDITIONS
-  for (var i = 0; i < 4; i++) {
-    var newP = document.createElement('p');
-    newP.textContent = cityWeatherData[i];
-    currentDiv.append(newP);
-  };
-  // 5-DAY FORECAST HEADER
-  generalForecastHeader.textContent = '5-Day Forecast';
-
-  weatherBlock.append(currentDiv);
-  weatherBlock.append(generalForecastHeader);
-  // FORECAST CONDITIONS
+// CREATES THE DAILY FORECAST DIVS
+var createForecast = function () {
   for (var i = 0; i < 5; i++) {
     var newForecastDiv = document.createElement('div');
     var newForecastHeader = document.createElement('h4');
-
     newForecastDiv.classList.add('forecast-day');
     newForecastHeader.textContent = 'Forecast';
     newForecastDiv.append(newForecastHeader);
@@ -83,8 +60,44 @@ var displayWeather = function () {
     };
   };
 };
-displayWeather();
 
+// CREATES CURRENT WEATHER DIV
+var createCurrent = function () {
+  var currentDiv = document.createElement('div');
+  var currentHeader = document.createElement('h2');
+  currentDiv.classList.add('current-weather');
+  // City Name & Date Header
+  currentHeader.textContent = 'Arden';
+  // Append to 
+  currentDiv.append(currentHeader);
+  // Loop creating current weather conditions
+  for (var i = 0; i < 4; i++) {
+    var newP = document.createElement('p');
+    newP.textContent = cityWeatherData[i];
+    currentDiv.append(newP);
+  };
+  weatherBlock.append(currentDiv);
+};
+
+// CREATE WEATHER BAR CONTENT
+var displayWeather = function () {
+  // Element Creation Variables
+  var newForecastHeader = document.createElement('h3');
+  var newForecastDiv = document.createElement('div');
+  // Creates and appends current weather box (need to pass current weather API)
+  createCurrent();
+  // adds "5-Day Forecast" header
+  newForecastHeader.textContent = '5-Day Forecast';
+  // adds class to forecast container div
+  newForecastDiv.classList.add('forecast-container');
+  // appends forecast header and div to weather bar
+  weatherBlock.append(newForecastHeader, newForecastDiv);
+
+  // Creates daily forecast on loop (need to pass forecast API data)
+  createForecast();
+};
+
+displayWeather();
 
 // Creates buttons for stored cities on page load
 var buttonCreation = function () {
@@ -129,9 +142,14 @@ var getAPI = function () {
 getAPI();
 
 console.log(currentDay);
-// BUTTON FUNCTIONALITY
+
+
+// BUTTON FUNCTIONALITY - NEED TO ADD CITY BUTTON FUNCTIONALITY
 // Search button
 cityFormEl.addEventListener('submit', searchCity);
+// cityButtonEl.addEventListener('click', function () {
+//  document.querySelector('.searched-city-button') = city;
+// });
 
 // for (var i = 0; i < totalSearches.length; i++) {
 //   var buttonField = document.createElement('button');

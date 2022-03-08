@@ -78,6 +78,12 @@ h3 {
   padding: 10px 0px;
 }
 
+.forecast-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .forecast-day {
   background-color: teal;
   color: white;
