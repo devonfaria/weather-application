@@ -18,6 +18,7 @@ var forecastWeatherData = ['temp', 'wind', 'humidity',]
 // FUNCTION: SENDS CITY NAME TO GET COORDINATES FUNCTION, AND CREATES BUTTONS FOR UNIQUE ENTRIES
 var searchCity = function (event) {
   event.preventDefault();
+  document.querySelector('.weather-bar').innerHTML = '';
   var city = cityInputEl.value.trim();
   var container = document.querySelector('.button-container');
   // Translates city name to coordinates
@@ -207,6 +208,7 @@ buttonCreation();
 cityFormEl.addEventListener('submit', searchCity);
 // Generated City Buttons
 $(document).on('click', '.searched-city-button', function (event) {
+  document.querySelector('.weather-bar').innerHTML = '';
   var cityName = $(this).attr('id');
   getCoordinates(cityName);
 });
