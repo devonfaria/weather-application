@@ -12,38 +12,24 @@ var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
 var cityWeatherData = ['temp', 'wind', 'humidity', 'uvi']
 var forecastWeatherData = ['temp', 'wind', 'humidity',]
 
-// TRANSLATES CITY NAME TO COORDINATES FUNCTION
-var getCoordinates = function (city) {
-  var apiCoordinates = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=7725fe6ddb0f977753dda606bc09c452`;
-  fetch(apiCoordinates).then(function (response) {
-    if (response.ok) {
-      response.json().then(function (data) {
-        console.log(city);
-        fetchCurrentWeather(city, data[0].lat, data[0].lon);
-      });
-    } else {
-      alert('Error: ' + response.statusText);
-    }
-  });
-};
 
 // DEFINING FUNCTIONS
-// Storing input from input field
+
+// FUNCTION: SENDS CITY NAME TO GET COORDINATES FUNCTION, AND CREATES BUTTONS FOR UNIQUE ENTRIES
 var searchCity = function (event) {
   event.preventDefault();
   var city = cityInputEl.value.trim();
   var container = document.querySelector('.button-container');
-// Translates city name to coordinates
+  // Translates city name to coordinates
   getCoordinates(city);
-
-// CONDITIONAL: ADDS CITY TO LOCALSTORAGE ARRAY IF NOT ALREADY THERE, AND THEN ADDS A BUTTON IN ADDITION
+  // CONDITIONAL: add city to localStorage if not already there, and creates a button for unique entries
   if (totalSearches.includes(`${city}`)) {
     // remove item from array
     console.log('Already has city');
   } else {
-  //   // Adds the city to the beginning of the array
-  // totalSearches.unshift(city);
-  // Stores totalSearches in localStorage
+    // Adds city to beginning of array in localStorage if not already there, and creates a button for unique entries
+    totalSearches.unshift(city);
+    // Stores totalSearches in localStorage
     var storage = JSON.stringify(totalSearches);
     localStorage.setItem('searches', storage);
     // Adds button for newly search city
@@ -55,12 +41,26 @@ var searchCity = function (event) {
   };
 };
 
-// Fetching current information from Weather API
-var fetchCurrentWeather = function (city, lat, lon) {
+// FUNCTION: TRANSLATES CITY NAME TO COORDINATES
+var getCoordinates = function (city) {
+  var apiCoordinates = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=7725fe6ddb0f977753dda606bc09c452`;
+  fetch(apiCoordinates).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
+        console.log(city);
+        createCurrentWeather(city, data[0].lat, data[0].lon);
+      });
+    } else {
+      alert('Error: ' + response.statusText);
+    }
+  });
+};
+
+// CREATING CURRENT WEATHER BOX
+// Fetching current information from Weather API, and then using it to populate the current weather conditions in the large box
+var createCurrentWeather = function (city, lat, lon) {
   var currentDiv = document.createElement('div');
   currentDiv.classList.add('current-weather');
-  // City Name & Date Header
-  // Append to 
   var apiCurrent = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
   fetch(apiCurrent)
     .then(function (response) {
@@ -71,55 +71,49 @@ var fetchCurrentWeather = function (city, lat, lon) {
       var currentHeaderEl = document.createElement('h2');
       var imgEl = document.createElement('img');
       currentHeaderEl.classList.add('current-header');
-      console.log(data.current.weather[0].icon);
-      imgEl.src = `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
-      var dateString = moment.unix(data.current.dt).format("MM/DD/YYYY");
 
+      // Adds HTML address to source for generated image element, inserting weather icon code into HTML for API fetch
+      imgEl.src = `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
+
+      // Pulling unix date from API, converting in moment.js, then adding to header content
+      var dateString = moment.unix(data.current.dt).format("MM/DD/YYYY");
       currentHeaderEl.textContent = `${city}  (${dateString}) `;
+
+      // Appending current weather header and weather icon
       currentDiv.append(currentHeaderEl, imgEl);
+
+      // array of current weather condition to pass into <p> generation loop
       var apiPull = [`Temperature: ${data.current.temp} Kelvin`, `Wind Speed: ${data.current.wind_speed} MPH`, `Humidity: ${data.current.humidity}%`, `UVI Index: ${data.current.uvi}`];
-      // Loop creating current weather conditions
+
+      // Loop creating  and appending current weather conditions
       for (var i = 0; i < 4; i++) {
       var newP = document.createElement('p');
       newP.textContent = apiPull[i];
       currentDiv.append(newP);
       };
     });
+  // Adding current weather div to weather bar
   weatherBlock.append(currentDiv);
+  // Calls function to create "5 Day Forecast" Header and forecast div elements
+  addForecastSection();
 };
-
-{/* <img class="city-icon" src="${icon}" alt="${
-        weather[0]["description"]
-      }">
-          <figcaption>${weather[0]["description"]}</figcaption>
-        </figure> */}
 
 // var apiForecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=7725fe6ddb0f977753dda606bc09c452`;
 
-// // Fetching forecast information from Weather API
-// var fetchForecastWeather = function (lat, lon) {
-//   var forcastDay = [];
-//   fetch(apiForecast)
-//     .then(function (response) {
-//       console.log(response.ok);
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       forcastDay = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
-//       console.log(forcastDay);
-//       return forcastDay;
-//     });
-// };
-
-// // CREATES CURRENT WEATHER DIV
-// var createCurrent = function (data) {
-//   // Loop creating current weather conditions
-//   for (var i = 0; i < 4; i++) {
-//     var newP = document.createElement('p');
-//     newP.textContent = cityWeatherData[i];
-//     currentDiv.append(newP);
-//   };
-// };
+// Fetching forecast information from Weather API
+var fetchForecastWeather = function (lat, lon) {
+  var forcastDay = [];
+  fetch(apiForecast)
+    .then(function (response) {
+      console.log(response.ok);
+      return response.json();
+    })
+    .then(function (data) {
+      forcastDay = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
+      console.log(forcastDay);
+      return forcastDay;
+    });
+};
 
 // CREATES THE DAILY FORECAST DIVS
 var createForecast = function () {
@@ -140,23 +134,20 @@ var createForecast = function () {
 };
 
 // CALL TO CREATE WEATHER BAR CONTENT
-var displayWeather = function () {
+var addForecastSection = function () {
   // Element Creation Variables
   var newForecastHeader = document.createElement('h3');
-  var newForecastDiv = document.createElement('div');
+  var forecastSectionEl = document.createElement('section');
   // Creates and appends current weather box (need to pass current weather API)
   // adds "5-Day Forecast" header
   newForecastHeader.textContent = '5-Day Forecast';
   // adds class to forecast container div
-  newForecastDiv.classList.add('forecast-container');
+  forecastSectionEl.classList.add('forecast-container');
   // appends forecast header and div to weather bar
-  weatherBlock.append(newForecastHeader, newForecastDiv);
-
+  weatherBlock.append(newForecastHeader, forecastSectionEl);
   // Creates daily forecast on loop (need to pass forecast API data)
   createForecast();
 };
-
-// displayWeather();
 
 // Creates buttons for stored cities on page load
 var buttonCreation = function () {
@@ -164,6 +155,7 @@ var buttonCreation = function () {
   for (var i = 0; i < totalSearches.length; i++) {
     var buttonField = document.createElement('button');
     buttonField.classList.add('searched-city-button');
+    buttonField.setAttribute('id', `${totalSearches[i]}`);
     buttonField.textContent = totalSearches[i];
     container.appendChild(buttonField);
   };
