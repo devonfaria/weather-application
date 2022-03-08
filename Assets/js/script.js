@@ -8,14 +8,10 @@ var currentWeatherHeader = $('.current-weather').children('h2');
 // Array for localStorage
 var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
 
-// Array to store API array for populating the current weather creation
-var cityWeatherData = ['temp', 'wind', 'humidity', 'uvi']
-var forecastWeatherData = ['temp', 'wind', 'humidity',]
-
 
 // DEFINING FUNCTIONS
 
-// FUNCTION: SENDS CITY NAME TO GET COORDINATES FUNCTION, AND CREATES BUTTONS FOR UNIQUE ENTRIES
+// FUNCTION: SENDS CITY NAME TO GET COORDINATES FUNCTION, AND CREATES BUTTONS FOR UNIQUE CITY ENTRIES
 var searchCity = function (event) {
   event.preventDefault();
   document.querySelector('.weather-bar').innerHTML = '';
@@ -57,7 +53,7 @@ var getCoordinates = function (city) {
   });
 };
 
-// CREATING CURRENT WEATHER BOX
+// FUNCTION: CREATING CURRENT WEATHER BOX
 // Fetching current information from Weather API, and then using it to populate the current weather conditions in the large box
 var createCurrentWeather = function (city, lat, lon) {
   var currentDiv = document.createElement('div');
@@ -95,11 +91,23 @@ var createCurrentWeather = function (city, lat, lon) {
   // Adding current weather div to weather bar
   weatherBlock.append(currentDiv);
   // Calls function to create "5 Day Forecast" Header and forecast div elements
-  addForecastSection();
+  addForecastHeader();
 };
 
-// CREATES DAILY FORECAST
+// CALL TO CREATE FORECAST HEADER AND DIV
+var addForecastHeader = function () {
+  // Element Creation Variables
+  var newForecastHeader = document.createElement('h3');
+  // adds "5-Day Forecast" header
+  newForecastHeader.textContent = '5-Day Forecast';
+  // appends forecast header to weather bar
+  weatherBlock.append(newForecastHeader);
+};
+
+// FUNCTION: CREATES DAILY FORECAST
 var createForecast = function (lat, lon) {
+  var forecastSectionEl = document.createElement('section');
+  forecastSectionEl.classList.add('forecast-container', 'row', 'justify-content-between');
   var apiForecast = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
   fetch(apiForecast)
     .then(function (response) {
@@ -108,7 +116,7 @@ var createForecast = function (lat, lon) {
     .then(function (data) {
       for (var i = 1; i < 6; i++) {
         var forecastEl = document.createElement('div');
-        forecastEl.classList.add('forecast-day');
+        forecastEl.classList.add('forecast-day', 'col');
         var forecastHeaderEl = document.createElement('h2');
         var imgEl = document.createElement('img');
         forecastHeaderEl.classList.add('forecast-header');
@@ -124,7 +132,6 @@ var createForecast = function (lat, lon) {
 
         // array of forecast condition to pass into <p> generation loop
         var apiPull = [`Temp: ${data.daily[i].temp.day} Kelvin`, `Wind: ${data.daily[i].wind_speed} MPH`, `Humidity: ${data.daily[i].humidity}%`];
-        console.log(apiPull);
 
         // Loop creating  and appending current weather conditions
         for (var j = 0; j < 3; j++) {
@@ -135,58 +142,10 @@ var createForecast = function (lat, lon) {
       
           
           // Adding daily forecast weather div to weather bar
-        weatherBlock.append(forecastEl);
+        forecastSectionEl.append(forecastEl);
       };
     });
-};
-// var apiForecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=7725fe6ddb0f977753dda606bc09c452`;
-
-// Fetching forecast information from Weather API
-// var fetchForecastWeather = function (lat, lon) {
-//   var forcastDay = [];
-//   fetch(apiForecast)
-//     .then(function (response) {
-//       console.log(response.ok);
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       forcastDay = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
-//       console.log(forcastDay);
-//       return forcastDay;
-//     });
-// };
-
-// CREATES THE DAILY FORECAST DIVS
-// var createForecast = function () {
-  // for (var i = 0; i < 5; i++) {
-  //   var newForecastDiv = document.createElement('div');
-  //   var newForecastHeader = document.createElement('h4');
-  //   newForecastDiv.classList.add('forecast-day');
-  //   newForecastHeader.textContent = 'Forecast';
-  //   newForecastDiv.append(newForecastHeader);
-
-  //   for (var j = 0; j < 3; j++) {
-  //   var newDetail = document.createElement('p');
-  //   newDetail.textContent = forecastWeatherData[j];
-  //   newForecastDiv.append(newDetail);
-  //   weatherBlock.append(newForecastDiv);
-  //   };
-  // };
-// };
-
-// CALL TO CREATE WEATHER BAR CONTENT
-var addForecastSection = function () {
-  // Element Creation Variables
-  var newForecastHeader = document.createElement('h3');
-  var forecastSectionEl = document.createElement('section');
-  // Creates and appends current weather box (need to pass current weather API)
-  // adds "5-Day Forecast" header
-  newForecastHeader.textContent = '5-Day Forecast';
-  // adds class to forecast container div
-  forecastSectionEl.classList.add('forecast-container');
-  // appends forecast header and div to weather bar
-  weatherBlock.append(newForecastHeader, forecastSectionEl);
-  // Creates daily forecast on loop (need to pass forecast API data)
+    weatherBlock.append(forecastSectionEl);
 };
 
 // Creates buttons for stored cities on page load
