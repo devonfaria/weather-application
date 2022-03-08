@@ -11,9 +11,20 @@ var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
 // Array to store API array for populating the current weather creation
 var cityWeatherData = ['temp', 'wind', 'humidity', 'uvi']
 var forecastWeatherData = ['temp', 'wind', 'humidity',]
-var currentDay = [];
 
-
+// TRANSLATES CITY NAME TO COORDINATES FUNCTION
+var getCoordinates = function (city) {
+  var apiCoordinates = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=7725fe6ddb0f977753dda606bc09c452`;
+  fetch(apiCoordinates).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
+        fetchCityWeather(data[0].lat, data[0].lon);
+      });
+    } else {
+      alert('Error: ' + response.statusText);
+    }
+  });
+}
 
 // DEFINING FUNCTIONS
 // Storing input from input field
@@ -21,43 +32,25 @@ var searchCity = function (event) {
   event.preventDefault();
   var city = cityInputEl.value.trim();
   var container = document.querySelector('.button-container');
-
-// ADD API GEOGRAPHICAL FUNCTION HERE
+// Translates city name to coordinates
+  getCoordinates(city);
 
 // CONDITIONAL: ADDS CITY TO LOCALSTORAGE ARRAY IF NOT ALREADY THERE, AND THEN ADDS A BUTTON IN ADDITION
   if (totalSearches.includes(`${city}`)) {
     // remove item from array
     console.log('Already has city');
   } else {
-    // Adds the city to the beginning of the array
-  totalSearches.unshift(city);
+  //   // Adds the city to the beginning of the array
+  // totalSearches.unshift(city);
   // Stores totalSearches in localStorage
-  var storage = JSON.stringify(totalSearches);
-  localStorage.setItem('searches', storage);
-  // Adds button for newly search city
-  var buttonNew = document.createElement('button');
-  buttonNew.classList.add('searched-city-button');
-  buttonNew.setAttribute('id', `${city}`);
-  buttonNew.textContent = city;
-  container.appendChild(buttonNew);
-  };
-};
-
-// CREATES THE DAILY FORECAST DIVS
-var createForecast = function () {
-  for (var i = 0; i < 5; i++) {
-    var newForecastDiv = document.createElement('div');
-    var newForecastHeader = document.createElement('h4');
-    newForecastDiv.classList.add('forecast-day');
-    newForecastHeader.textContent = 'Forecast';
-    newForecastDiv.append(newForecastHeader);
-
-    for (var j = 0; j < 3; j++) {
-    var newDetail = document.createElement('p');
-    newDetail.textContent = forecastWeatherData[j];
-    newForecastDiv.append(newDetail);
-    weatherBlock.append(newForecastDiv);
-    };
+    var storage = JSON.stringify(totalSearches);
+    localStorage.setItem('searches', storage);
+    // Adds button for newly search city
+    var buttonNew = document.createElement('button');
+    buttonNew.classList.add('searched-city-button');
+    buttonNew.setAttribute('id', `${city}`);
+    buttonNew.textContent = city;
+    container.appendChild(buttonNew);
   };
 };
 
@@ -79,7 +72,25 @@ var createCurrent = function () {
   weatherBlock.append(currentDiv);
 };
 
-// CREATE WEATHER BAR CONTENT
+// CREATES THE DAILY FORECAST DIVS
+var createForecast = function () {
+  for (var i = 0; i < 5; i++) {
+    var newForecastDiv = document.createElement('div');
+    var newForecastHeader = document.createElement('h4');
+    newForecastDiv.classList.add('forecast-day');
+    newForecastHeader.textContent = 'Forecast';
+    newForecastDiv.append(newForecastHeader);
+
+    for (var j = 0; j < 3; j++) {
+    var newDetail = document.createElement('p');
+    newDetail.textContent = forecastWeatherData[j];
+    newForecastDiv.append(newDetail);
+    weatherBlock.append(newForecastDiv);
+    };
+  };
+};
+
+// CALL TO CREATE WEATHER BAR CONTENT
 var displayWeather = function () {
   // Element Creation Variables
   var newForecastHeader = document.createElement('h3');
@@ -117,7 +128,7 @@ buttonCreation();
 
 // Template literal for API Key Generation
 // var api = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&appid=${apiKey}`;
-var apiCurrent = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452';
+// var apiCurrent = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452';
 var apiFiveDay = 'https://api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=7725fe6ddb0f977753dda606bc09c452'
 // Chicago test API
 // 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452'
@@ -126,22 +137,21 @@ var apiFiveDay = 'https://api.openweathermap.org/data/2.5/forecast?lat=35&lon=13
 
 
 // Fetching current information from Weather API
-var getAPI = function () {
-  var requestUrl = apiCurrent;
-  fetch(requestUrl)
+var fetchCityWeather = function (lat, lon) {
+  var currentDay = [];
+  var apiCurrent = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
+  fetch(apiCurrent)
     .then(function (response) {
       console.log(response.ok);
       return response.json();
     })
     .then(function (data) {
       currentDay = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
+      console.log(currentDay);
       return currentDay;
     });
-    console.log(currentDay);
 };
-getAPI();
 
-console.log(currentDay);
 
 
 // BUTTON FUNCTIONALITY - NEED TO ADD CITY BUTTON FUNCTIONALITY
