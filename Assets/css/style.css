@@ -1,18 +1,18 @@
 * {
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
 header {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: linear-gradient(to bottom right, rgb(36, 65, 190), rgb(77, 13, 122));
+  background-image: linear-gradient(to bottom right, rgb(94, 115, 139), rgb(2, 19, 37));
 }
 
 h1 {
   padding: 10px;
   color: white;
-  font-weight: bold;
+  font-weight: 900;
 }
 
 main {
@@ -41,8 +41,6 @@ img {
 }
 
 .button-container {
-  width: 90%;
-  margin: 2% 5% 2% 5%;
   padding-top: 15px;
   border-top: 3px solid black;
 }
@@ -51,7 +49,8 @@ img {
   padding: 5px;
   margin: 10px 5% 0 5%;
   width: 90%;
-  background-color: grey;
+  border-radius: 7px;
+  background-color: rgb(137, 142, 158);
   color: white;
 }
 
@@ -65,7 +64,7 @@ img {
 }
 
 .weather-bar {
-  padding: 10px;
+  margin: 20px;
 }
 
 .current-weather {
@@ -112,6 +111,7 @@ h3 {
 }
 
 .forecast-day {
+  margin: 10px;
   padding-left: 20px;
   background-color: rgb(39, 54, 71);
   color: white;

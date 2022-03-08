@@ -17,7 +17,9 @@
 
 ## Description
 
-Welcome to the daily Weather Dashboard application! 
+Welcome to the daily Weather Dashboard application! This application will allow you to search for a city, and retrieve current weather conditions and a 5-Day Forecast.
+
+When you search a city, the javascript will attempt to pull the city coordinates from Open Weather API. If it is found, the application will begin fetching weather data to generate the HTML elements that appear on the right, and create a saved search button in the search bar. If not, it will show an error.
 
 ## Visuals
 

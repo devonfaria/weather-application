@@ -23,6 +23,7 @@ var searchCity = function (event) {
 
 // FUNCTION: TRANSLATES CITY NAME TO COORDINATES
 var getCoordinates = function (city) {
+  var weatherBar = document.querySelector('.weather-bar');
   var cityName = city;
   var apiCoordinates = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=7725fe6ddb0f977753dda606bc09c452`;
   fetch(apiCoordinates)
@@ -31,7 +32,9 @@ var getCoordinates = function (city) {
       response.json()
       .then(function (data) {
         if (!data.length) {
-          console.log('Not a city!');
+          var notFound = document.createElement('h2');
+          notFound.textContent = `Results for '${city}' were not found.`
+          weatherBar.append(notFound);
           return;
         } else {
           addButton(cityName);
