@@ -58,12 +58,9 @@ var searchCity = function (event) {
 // Fetching current information from Weather API
 var fetchCurrentWeather = function (city, lat, lon) {
   var currentDiv = document.createElement('div');
-  var currentHeader = document.createElement('h2');
   currentDiv.classList.add('current-weather');
   // City Name & Date Header
-  currentHeader.textContent = `${city}`;
   // Append to 
-  currentDiv.append(currentHeader);
   var apiCurrent = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
   fetch(apiCurrent)
     .then(function (response) {
@@ -71,6 +68,15 @@ var fetchCurrentWeather = function (city, lat, lon) {
       return response.json();
     })
     .then(function (data) {
+      var currentHeaderEl = document.createElement('h2');
+      var imgEl = document.createElement('img');
+      currentHeaderEl.classList.add('current-header');
+      console.log(data.current.weather[0].icon);
+      imgEl.src = `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
+      var dateString = moment.unix(data.current.dt).format("MM/DD/YYYY");
+
+      currentHeaderEl.textContent = `${city}  (${dateString}) `;
+      currentDiv.append(currentHeaderEl, imgEl);
       var apiPull = [`Temperature: ${data.current.temp} Kelvin`, `Wind Speed: ${data.current.wind_speed} MPH`, `Humidity: ${data.current.humidity}%`, `UVI Index: ${data.current.uvi}`];
       // Loop creating current weather conditions
       for (var i = 0; i < 4; i++) {
@@ -82,21 +88,28 @@ var fetchCurrentWeather = function (city, lat, lon) {
   weatherBlock.append(currentDiv);
 };
 
-// Fetching forecast information from Weather API
-var fetchForecastWeather = function (lat, lon) {
-  var forcastDay = [];
-  var apiForecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=7725fe6ddb0f977753dda606bc09c452`;
-  fetch(apiForecast)
-    .then(function (response) {
-      console.log(response.ok);
-      return response.json();
-    })
-    .then(function (data) {
-      forcastDay = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
-      console.log(forcastDay);
-      return forcastDay;
-    });
-};
+{/* <img class="city-icon" src="${icon}" alt="${
+        weather[0]["description"]
+      }">
+          <figcaption>${weather[0]["description"]}</figcaption>
+        </figure> */}
+
+// var apiForecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=7725fe6ddb0f977753dda606bc09c452`;
+
+// // Fetching forecast information from Weather API
+// var fetchForecastWeather = function (lat, lon) {
+//   var forcastDay = [];
+//   fetch(apiForecast)
+//     .then(function (response) {
+//       console.log(response.ok);
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       forcastDay = [data.current.temp, data.current.wind_speed, data.current.humidity, data.current.uvi];
+//       console.log(forcastDay);
+//       return forcastDay;
+//     });
+// };
 
 // // CREATES CURRENT WEATHER DIV
 // var createCurrent = function (data) {
