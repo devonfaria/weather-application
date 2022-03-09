@@ -77,7 +77,7 @@ var addButton = function (city) {
 var createCurrentWeather = function (city, lat, lon) {
   var currentDiv = document.createElement('div');
   currentDiv.classList.add('current-weather');
-  var apiCurrent = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
+  var apiCurrent = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
   fetch(apiCurrent)
     .then(function (response) {
       return response.json();
@@ -98,7 +98,7 @@ var createCurrentWeather = function (city, lat, lon) {
       currentDiv.append(currentHeaderEl, imgEl);
 
       // array of current weather condition to pass into <p> generation loop
-      var apiPull = [`Temperature: ${data.current.temp} Kelvin`, `Wind Speed: ${data.current.wind_speed} MPH`, `Humidity: ${data.current.humidity}%`];
+      var apiPull = [`Temperature: ${data.current.temp}° F`, `Wind Speed: ${data.current.wind_speed} MPH`, `Humidity: ${data.current.humidity}%`];
 
       // Loop creating  and appending current weather conditions
       for (var i = 0; i < 3; i++) {
@@ -107,6 +107,7 @@ var createCurrentWeather = function (city, lat, lon) {
       currentDiv.append(newP);
       };
       var newUVI = document.createElement('p');
+      // Conditional that assigns the color of UV Index
       if (data.current.uvi < 3) {
         newUVI.innerHTML = 'UVI Index: ' + `<span class='safe'>${data.current.uvi}%</span>`;
       } else if(data.current.uvi > 5){
@@ -136,7 +137,7 @@ var addForecastHeader = function () {
 var createForecast = function (lat, lon) {
   var forecastSectionEl = document.createElement('section');
   forecastSectionEl.classList.add('forecast-container', 'row', 'justify-content-between');
-  var apiForecast = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
+  var apiForecast = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely,alerts&appid=7725fe6ddb0f977753dda606bc09c452`;
   fetch(apiForecast)
     .then(function (response) {
       return response.json();
@@ -159,7 +160,7 @@ var createForecast = function (lat, lon) {
         forecastEl.append(forecastHeaderEl, imgEl);
 
         // array of forecast condition to pass into <p> generation loop
-        var apiPull = [`Temp: ${data.daily[i].temp.day} Kelvin`, `Wind: ${data.daily[i].wind_speed} MPH`, `Humidity: ${data.daily[i].humidity}%`];
+        var apiPull = [`Temp: ${data.daily[i].temp.day}° F`, `Wind: ${data.daily[i].wind_speed} MPH`, `Humidity: ${data.daily[i].humidity}%`];
 
         // Loop creating  and appending current weather conditions
         for (var j = 0; j < 3; j++) {
