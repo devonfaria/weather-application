@@ -24,7 +24,7 @@ var handleSubmission = function (event) {
 var getCoordinates = function (city) {
   var weatherBar = document.querySelector('.weather-bar');
   var cityName = city;
-  var apiCoordinates = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=7725fe6ddb0f977753dda606bc09c452`;
+  var apiCoordinates = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=7725fe6ddb0f977753dda606bc09c452`;
   fetch(apiCoordinates)
     .then(function (response) {
       if (response.ok) {
@@ -92,7 +92,7 @@ var createCurrentWeather = function (city, lat, lon) {
       currentHeaderEl.classList.add('current-header');
 
       // Weather icon code from API fetch completes Icon URL
-      imgEl.src = `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
+      imgEl.src = `https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
 
       // Pulling unix date from API, converting in moment.js, then adding to header content
       var dateString = moment.unix(data.current.dt).format("MM/DD/YYYY");
@@ -153,7 +153,7 @@ var createForecast = function (lat, lon) {
         var forecastHeaderEl = document.createElement('h2');
         var imgEl = document.createElement('img');
         forecastHeaderEl.classList.add('forecast-header');
-        imgEl.src = `http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png`;
+        imgEl.src = `https://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png`;
 
         // Pulling unix date from API, converting in moment.js, then adding to header content
         var dateString = moment.unix(data.daily[i].dt).format("MM/DD/YYYY");
