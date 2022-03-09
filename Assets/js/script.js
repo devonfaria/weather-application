@@ -4,7 +4,6 @@ var cityInputEl = document.querySelector('.input-field');
 var cityButtonEl;
 var searchBtn = document.querySelector('.search-btn');
 var weatherBlock = document.querySelector('.weather-bar');
-var currentWeatherHeader = $('.current-weather').children('h2');
 // Array for localStorage
 var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
 
@@ -12,7 +11,7 @@ var totalSearches = JSON.parse(localStorage.getItem('searches')) || [];
 // DEFINING FUNCTIONS
 
 // FUNCTION: SENDS CITY NAME TO GET COORDINATES FUNCTION AND CLEARS ANY WEATHER INFO
-var searchCity = function (event) {
+var handleSubmission = function (event) {
   event.preventDefault();
   // removes HTML from weather bar
   document.querySelector('.weather-bar').innerHTML = '';
@@ -52,13 +51,13 @@ var getCoordinates = function (city) {
   });
 };
 
+// FUNCTION: Adds city name to button and local storage if new
 var addButton = function (city) {
   var container = document.querySelector('.button-container');
 
-  // CONDITIONAL: add city to localStorage if not already there, and creates a button for unique entries
+  // conditional: add city to localStorage if not already there, and creates a button for unique entries
   if (totalSearches.includes(`${city}`)) {
-    // remove item from array
-    console.log('Already has city');
+    return;
   } else {
     // Adds city to beginning of array in localStorage if not already there, and creates a button for unique entries
     totalSearches.unshift(city);
@@ -107,9 +106,9 @@ var createCurrentWeather = function (city, lat, lon) {
 
       // Loop creating and appending current weather conditions
       for (var i = 0; i < 3; i++) {
-      var newP = document.createElement('p');
-      newP.textContent = apiPull[i];
-      currentDiv.append(newP);
+        var newP = document.createElement('p');
+        newP.textContent = apiPull[i];
+        currentDiv.append(newP);
       };
       var newUVI = document.createElement('p');
       // Conditional that assigns the color of UV Index
@@ -120,7 +119,7 @@ var createCurrentWeather = function (city, lat, lon) {
       } else {
         newUVI.innerHTML = 'UVI Index: ' + `<span class='moderate'>${data.current.uvi}%</span>`;
       };
-      currentDiv.append(newUVI);
+    currentDiv.append(newUVI);
     });
   // Adding current weather div to weather bar
   weatherBlock.append(currentDiv);
@@ -199,7 +198,7 @@ buttonCreation();
 // BUTTON FUNCTIONALITY
 
 // Search button
-cityFormEl.addEventListener('submit', searchCity);
+cityFormEl.addEventListener('submit', handleSubmission);
 // Generated City Buttons
 $(document).on('click', '.searched-city-button', function (event) {
   document.querySelector('.weather-bar').innerHTML = '';
