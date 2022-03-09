@@ -41,17 +41,18 @@ img {
 }
 
 .button-container {
-  padding-top: 15px;
-  border-top: 3px solid black;
+  padding: 15px 0 0 0;
+  border-top: 2px solid black;
 }
 
 .searched-city-button {
-  padding: 5px;
+  padding: 8px;
   margin: 10px 5% 0 5%;
   width: 90%;
   border-radius: 7px;
-  background-color: rgb(137, 142, 158);
-  color: white;
+  background-color: rgb(148, 152, 167);
+  color: black;
+  border: none;
 }
 
 .search-btn {
@@ -75,6 +76,7 @@ img {
 
 .current-header {
   display: inline;
+  font-weight: bold;
 }
 
 .safe {

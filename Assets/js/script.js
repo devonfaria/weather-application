@@ -43,7 +43,9 @@ var getCoordinates = function (city) {
         };
       });
       } else {
-        alert('Error: ' + response.statusText);
+        var notFound = document.createElement('h2');
+        notFound.textContent = `Results for '  ' were not found.`
+        weatherBar.append(notFound);
       }
   });
 };
