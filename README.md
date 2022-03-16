@@ -6,6 +6,8 @@
 
 * [Description](#description)
 * [Visuals](#visuals)
+* [Technologies](#technologies)
+* [Licenses](#licenses)
 * [Support](#support)
 * [Contributions](#contributions)
 
@@ -25,11 +27,30 @@ Searched cities will be stored in localStorage so that upon reload, all of the p
 
 The following layout is what you can expect to see on your browser.
 
-![alt text](./assets/images/weather-dashboard.gif)
+![weather dashboard landing page](./assets/images/weather-dashboard.gif)
 
 This is the error that will display if you submit nothing into the input field.
 
-![alt text](./assets/images/bad-request.png)
+![no city found error](./assets/images/bad-request.png)
+
+## Technologies
+
+* HTML
+* CSS
+* JavaScript
+* Open Weather API
+
+## Licenses
+
+The MIT License (MIT)
+
+Copyright (c) 2022 Devon Faria
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Support
 
